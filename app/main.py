@@ -1,16 +1,19 @@
 from typing import Callable, Any
+from functools import wraps
 
 
 def cache(func: Callable) -> Callable:
     parameters = {}
 
+    @wraps(func)
     def wrapper(*args, **kwargs) -> Any:
-        if (args, tuple(sorted(kwargs.items()))) not in parameters:
+        key = (args, tuple(sorted(kwargs.items())))
+        if key not in parameters:
             cached_data = func(*args, **kwargs)
-            parameters[(args, tuple(sorted(kwargs.items())))] = cached_data
+            parameters[key] = cached_data
             print("Calculating new result")
             return cached_data
         else:
             print("Getting from cache")
-            return parameters[(args, tuple(sorted(kwargs.items())))]
+            return parameters[key]
     return wrapper
