@@ -9,11 +9,9 @@ def cache(func: Callable) -> Callable:
     def wrapper(*args, **kwargs) -> Any:
         key = (args, tuple(sorted(kwargs.items())))
         if key not in parameters:
-            cached_data = func(*args, **kwargs)
-            parameters[key] = cached_data
+            parameters[key] = func(*args, **kwargs)
             print("Calculating new result")
-            return cached_data
         else:
             print("Getting from cache")
-            return parameters[key]
+        return parameters[key]
     return wrapper
