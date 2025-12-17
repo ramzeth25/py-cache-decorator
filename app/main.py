@@ -5,12 +5,12 @@ def cache(func: Callable) -> Callable:
     parameters = {}
 
     def wrapper(*args, **kwargs) -> Any:
-        if f"{args}, {kwargs}" not in parameters:
+        if (args, tuple(sorted(kwargs.items()))) not in parameters:
             cached_data = func(*args, **kwargs)
-            parameters[f"{args}, {kwargs}"] = cached_data
+            parameters[(args, tuple(sorted(kwargs.items())))] = cached_data
             print("Calculating new result")
             return cached_data
         else:
             print("Getting from cache")
-            return parameters[f"{args}, {kwargs}"]
+            return parameters[(args, tuple(sorted(kwargs.items())))]
     return wrapper
